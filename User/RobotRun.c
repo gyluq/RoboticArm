@@ -1,47 +1,47 @@
 #include "include.h"
 
-bool fRobotRun = FALSE;//×ÜÔËÐÐ±êÖ¾Î»
-uint8 ActFullNum = 0;//¶¯×÷×é±àºÅ
-uint32 ActFullRunTimesSum = 1;//¸ÃÖµÎª0´ú±íÎÞÏÞ´Î
+bool fRobotRun = FALSE;//æ€»è¿è¡Œæ ‡å¿—ä½
+uint8 ActFullNum = 0;//åŠ¨ä½œç»„ç¼–å·
+uint32 ActFullRunTimesSum = 1;//è¯¥å€¼ä¸º0ä»£è¡¨æ— é™æ¬¡
 
-uint32 ActFullRunTimes = 0;//µ±Ç°ÒÑ¾­ÔËÐÐµÄ´ÎÊý
+uint32 ActFullRunTimes = 0;//å½“å‰å·²ç»è¿è¡Œçš„æ¬¡æ•°
 
-uint32 TimeActionRunTotal = 0;//ÔËÐÐÊ±¼ä×Ü¼Æ
-bool fFrameRunFinish = TRUE;//Ã¿Ö¡ÔËÐÐÍê±Ï±êÖ¾Î»
+uint32 TimeActionRunTotal = 0;//è¿è¡Œæ—¶é—´æ€»è®¡
+bool fFrameRunFinish = TRUE;//æ¯å¸§è¿è¡Œå®Œæ¯•æ ‡å¿—ä½
 
-uint8 FrameIndexSum = 0;//Ò»¸ö¶¯×÷×éÀïÃæ×Ü¹²ÓÐ¶àÉÙ¶¯×÷
-uint8 FrameIndex = 0;//¶¯×÷×éÀïÃæÄ³Ò»¶¯×÷µÄ±àºÅ£¬´Ó0¿ªÊ¼
+uint8 FrameIndexSum = 0;//ä¸€ä¸ªåŠ¨ä½œç»„é‡Œé¢æ€»å…±æœ‰å¤šå°‘åŠ¨ä½œ
+uint8 FrameIndex = 0;//åŠ¨ä½œç»„é‡Œé¢æŸä¸€åŠ¨ä½œçš„ç¼–å·ï¼Œä»Ž0å¼€å§‹
 
 
 /**
-  * @brief  ³õÊ¼»¯²¢ÔËÐÐÐÂµÄ¶¯×÷
-  * @param  actFullnum:		¶¯×÷×é±àºÅ
-  * @param  times: 			ÔËÐÐ´ÎÊý
+  * @brief  åˆå§‹åŒ–å¹¶è¿è¡Œæ–°çš„åŠ¨ä½œ
+  * @param  actFullnum:		åŠ¨ä½œç»„ç¼–å·
+  * @param  times: 			è¿è¡Œæ¬¡æ•°
   * @retval void
   */
 void FullActRun(uint8 actFullnum, uint32 times) {
 	uint8 frameIndexSum;
-	FlashRead(MEM_FRAME_INDEX_SUM_BASE + actFullnum, 1, &frameIndexSum);//»ñÈ¡¸Ã¶¯×÷×éµÄ¶¯×÷Êý
+	FlashRead(MEM_FRAME_INDEX_SUM_BASE + actFullnum, 1, &frameIndexSum);//èŽ·å–è¯¥åŠ¨ä½œç»„çš„åŠ¨ä½œæ•°
 	
-	//¸Ã¶¯×÷×éµÄ¶¯×÷Êý´óÓÚ0£¬ËµÃ÷ÊÇÓÐÐ§µÄ£¬ÒÑ¾­ÏÂÔØ¹ý¶¯×÷ÁË¡£
+	//è¯¥åŠ¨ä½œç»„çš„åŠ¨ä½œæ•°å¤§äºŽ0ï¼Œè¯´æ˜Žæ˜¯æœ‰æ•ˆçš„ï¼Œå·²ç»ä¸‹è½½è¿‡åŠ¨ä½œäº†ã€‚
 	if(frameIndexSum > 0) {
 		FrameIndexSum = frameIndexSum;
 		if(ActFullNum != actFullnum) {
-			if(actFullnum == 0) {//0ºÅ¶¯×÷×éÇ¿ÖÆÔËÐÐ£¬¿ÉÒÔÖÐ¶Ïµ±Ç°ÕýÔÚÔËÐÐµÄÆäËû¶¯×÷×é
+			if(actFullnum == 0) {//0å·åŠ¨ä½œç»„å¼ºåˆ¶è¿è¡Œï¼Œå¯ä»¥ä¸­æ–­å½“å‰æ­£åœ¨è¿è¡Œçš„å…¶ä»–åŠ¨ä½œç»„
 				fRobotRun = FALSE;
 				ActFullRunTimes = 0;
 				fFrameRunFinish = TRUE;
 			}
-		} else {//Ö»ÓÃÇ°ºóÁ½´Î¶¯×÷×é±àºÅÏàÍ¬²ÅÄÜÐÞ¸Ä´ÎÊý
+		} else {//åªç”¨å‰åŽä¸¤æ¬¡åŠ¨ä½œç»„ç¼–å·ç›¸åŒæ‰èƒ½ä¿®æ”¹æ¬¡æ•°
 			ActFullRunTimesSum = times;
 		}
 		
-		if(FALSE == fRobotRun) {//»úÐµ±Û½áÊøÔË¶¯
+		if(FALSE == fRobotRun) {//æœºæ¢°è‡‚ç»“æŸè¿åŠ¨
 			ActFullNum = actFullnum;
-			ActFullRunTimesSum = times;//×ÜÔËÐÐ´ÎÊý
-			FrameIndex = 0;//´ÓµÚ0Ö¡¿ªÊ¼
-			ActFullRunTimes = 0;//ÐÂ¶¯×÷£¬Ê¹µ±Ç°ÔË¶¯´ÎÊýÎª0
-			fRobotRun = TRUE;//¿ªÊ¼ÔËÐÐ
+			ActFullRunTimesSum = times;//æ€»è¿è¡Œæ¬¡æ•°
+			FrameIndex = 0;//ä»Žç¬¬0å¸§å¼€å§‹
+			ActFullRunTimes = 0;//æ–°åŠ¨ä½œï¼Œä½¿å½“å‰è¿åŠ¨æ¬¡æ•°ä¸º0
+			fRobotRun = TRUE;//å¼€å§‹è¿è¡Œ
 			TimeActionRunTotal = gSystemTickCount;
 		}
 	}
@@ -57,29 +57,29 @@ void FullActStop(void) {
 
 
 /**
-  * @brief  ÔËÐÐ¶¯×÷×éµÄÄ³Ò»Ö¡£¬²¢·µ»ØÔËÐÐÊ±¼ä
-  * @param  actFullnum:		¶¯×÷×é±àºÅ
-  * @param  frameIndex: 	Ö¡Ë÷Òý
-  * @retval ÔËÐÐÊ±¼ä£¨ms£©
+  * @brief  è¿è¡ŒåŠ¨ä½œç»„çš„æŸä¸€å¸§ï¼Œå¹¶è¿”å›žè¿è¡Œæ—¶é—´
+  * @param  actFullnum:		åŠ¨ä½œç»„ç¼–å·
+  * @param  frameIndex: 	å¸§ç´¢å¼•
+  * @retval è¿è¡Œæ—¶é—´ï¼ˆmsï¼‰
   */
 uint16 ActSubFrameRun(uint8 actFullnum,uint8 frameIndex) {
 	uint32 i = 0;
 
-	//uint16 frameSumSum = 0;	//ÓÉÓÚ×Ó¶¯×÷¶¼ÊÇÁ¬Ðø´æ·ÅµÄ£¬×Ó¶¯×÷µÄÖ¡ÊýÓÖÊÇ²»È·¶¨µÄÊý
-	//ËùÒÔÒª×ÜÔÚÒ»ÆðËã¡£ËùÓÐÇ°Ãæ×Ó¶¯×÷µÄÖ¡¼ÓÆðÀ´
+	//uint16 frameSumSum = 0;	//ç”±äºŽå­åŠ¨ä½œéƒ½æ˜¯è¿žç»­å­˜æ”¾çš„ï¼Œå­åŠ¨ä½œçš„å¸§æ•°åˆæ˜¯ä¸ç¡®å®šçš„æ•°
+	//æ‰€ä»¥è¦æ€»åœ¨ä¸€èµ·ç®—ã€‚æ‰€æœ‰å‰é¢å­åŠ¨ä½œçš„å¸§åŠ èµ·æ¥
 	uint8 frame[ACT_SUB_FRAME_SIZE];
 	uint8 servoCount;
 	uint32 time;
 	uint8 id;
 	uint16 pos;
 
-	//½«¶¯×÷×éµÄËùÓÐÖ¡È«²¿¶ÁÈëframeÖÐ
+	//å°†åŠ¨ä½œç»„çš„æ‰€æœ‰å¸§å…¨éƒ¨è¯»å…¥frameä¸­
 	FlashRead((MEM_ACT_FULL_BASE) + (actFullnum * ACT_FULL_SIZE) + (frameIndex * ACT_SUB_FRAME_SIZE) , ACT_SUB_FRAME_SIZE, frame);
 	
 	servoCount = frame[0];
 	time = frame[1] + (frame[2]<<8);
 
-	if(servoCount > 8) {//¶æ»úÊý³¬¹ý8¸ö£¬ËµÃ÷ÏÂÔØÁË´íÎó¶¯×÷
+	if(servoCount > 8) {//èˆµæœºæ•°è¶…è¿‡8ä¸ªï¼Œè¯´æ˜Žä¸‹è½½äº†é”™è¯¯åŠ¨ä½œ
 		FullActStop();
 		return 0;
 	}
@@ -94,26 +94,26 @@ uint16 ActSubFrameRun(uint8 actFullnum,uint8 frameIndex) {
 }
 
 
-/* Ö´ÐÐ¶¯×÷×é */
+/* æ‰§è¡ŒåŠ¨ä½œç»„ */
 void TaskRobotRun(void){
 	if(fRobotRun)
 	{
-		if(TRUE == fFrameRunFinish)//ÔËÐÐÍê³Éºó¿ªÊ¼ÏÂÒ»Ö¡¶¯×÷ÔËÐÐ
+		if(TRUE == fFrameRunFinish)//è¿è¡Œå®ŒæˆåŽå¼€å§‹ä¸‹ä¸€å¸§åŠ¨ä½œè¿è¡Œ
 		{
 			fFrameRunFinish = FALSE;
-			TimeActionRunTotal += ActSubFrameRun(ActFullNum, FrameIndex);//ÔËÐÐFrameIndex¶¯×÷Ö¡£¬²¢¼ÓÉÏ¶¯×÷Ê±¼ä
+			TimeActionRunTotal += ActSubFrameRun(ActFullNum, FrameIndex);//è¿è¡ŒFrameIndexåŠ¨ä½œå¸§ï¼Œå¹¶åŠ ä¸ŠåŠ¨ä½œæ—¶é—´
 		}
 		else
 		{
-			if(gSystemTickCount >= TimeActionRunTotal)//²»¶Ï¼ì²âÕâÖ¡¶¯×÷ÔÚÖ¸¶¨Ê±¼äÄÚÔËÐÐÍê³É
+			if(gSystemTickCount >= TimeActionRunTotal)//ä¸æ–­æ£€æµ‹è¿™å¸§åŠ¨ä½œåœ¨æŒ‡å®šæ—¶é—´å†…è¿è¡Œå®Œæˆ
 			{
 				fFrameRunFinish = TRUE;
-				if(++FrameIndex >= FrameIndexSum)//ÒÑÔËÐÐÍê¸Ã¶¯×÷×é×îºóÒ»¸ö¶¯×÷
+				if(++FrameIndex >= FrameIndexSum)//å·²è¿è¡Œå®Œè¯¥åŠ¨ä½œç»„æœ€åŽä¸€ä¸ªåŠ¨ä½œ
 				{
 					FrameIndex = 0;
-					if(ActFullRunTimesSum != 0)//Èç¹ûÔËÐÐ´ÎÊýµÈÓÚ0£¬¼´´ú±íÎÞÏÞ´ÎÔËÐÐ£¬¾Í²»½øÈëifÓï¾ä£¬¾ÍÒ»Ö±ÔËÐÐÁË
+					if(ActFullRunTimesSum != 0)//å¦‚æžœè¿è¡Œæ¬¡æ•°ç­‰äºŽ0ï¼Œå³ä»£è¡¨æ— é™æ¬¡è¿è¡Œï¼Œå°±ä¸è¿›å…¥ifè¯­å¥ï¼Œå°±ä¸€ç›´è¿è¡Œäº†
 					{
-						if(++ActFullRunTimes >= ActFullRunTimesSum)//µ½´ïÔËÐÐ´ÎÊý£¬ÔËÐÐÍ£Ö¹
+						if(++ActFullRunTimes >= ActFullRunTimesSum)//åˆ°è¾¾è¿è¡Œæ¬¡æ•°ï¼Œè¿è¡Œåœæ­¢
 						{
 							McuToPCSendData(CMD_FULL_ACTION_STOP,0,0);
 							fRobotRun = FALSE;
@@ -131,7 +131,7 @@ void TaskRobotRun(void){
 		ActFullRunTimes = 0;
 		fFrameRunFinish = TRUE;
 		TimeActionRunTotal = gSystemTickCount;
-		//Ö»ÐèÒªÔÚÔËÐÐÍêÕû¶¯×÷×éµÄ×î¿ªÊ¼¸³Ò»ÏÂ³õÖµ¾Í¿ÉÒÔ£¬±ÜÃâÀÛ»ýÎó²î
+		//åªéœ€è¦åœ¨è¿è¡Œå®Œæ•´åŠ¨ä½œç»„çš„æœ€å¼€å§‹èµ‹ä¸€ä¸‹åˆå€¼å°±å¯ä»¥ï¼Œé¿å…ç´¯ç§¯è¯¯å·®
 	}
 }
 

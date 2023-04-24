@@ -11,7 +11,7 @@ uint8  frameIndexSumSum[256];
 
 
 
-/* ³õÊ¼»¯UART1 */
+/* åˆå§‹åŒ–UART1 */
 void InitUart1(void) {
 	NVIC_InitTypeDef NVIC_InitStructure;
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -29,8 +29,8 @@ void InitUart1(void) {
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	//USART ³õÊ¼»¯ÉèÖÃ
-	USART_InitStructure.USART_BaudRate = 9600;//Ò»°ãÉèÖÃÎª9600;
+	//USART åˆå§‹åŒ–è®¾ç½®
+	USART_InitStructure.USART_BaudRate = 9600;//ä¸€èˆ¬è®¾ç½®ä¸º9600;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -38,37 +38,37 @@ void InitUart1(void) {
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
 	USART_Init(USART1, &USART_InitStructure);
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//¿ªÆôÖĞ¶Ï
-	USART_Cmd(USART1, ENABLE);                    //Ê¹ÄÜ´®¿Ú
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//å¼€å¯ä¸­æ–­
+	USART_Cmd(USART1, ENABLE);                    //ä½¿èƒ½ä¸²å£
 	
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1 ;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQÍ¨µÀÊ¹ÄÜ
-	NVIC_Init(&NVIC_InitStructure);	//¸ù¾İNVIC_InitStructÖĞÖ¸¶¨µÄ²ÎÊı³õÊ¼»¯ÍâÉèNVIC¼Ä´æÆ÷USART1
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQé€šé“ä½¿èƒ½
+	NVIC_Init(&NVIC_InitStructure);	//æ ¹æ®NVIC_InitStructä¸­æŒ‡å®šçš„å‚æ•°åˆå§‹åŒ–å¤–è®¾NVICå¯„å­˜å™¨USART1
 }
 
 
-/* Í¨¹ı´®¿Ú·¢ËÍÒ»×Ö½ÚÊı¾İ */
+/* é€šè¿‡ä¸²å£å‘é€ä¸€å­—èŠ‚æ•°æ® */
 void Uart1SendData(BYTE dat) {
-	while((USART1->SR&0X40)==0);//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+	while((USART1->SR&0X40)==0);//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•
 	USART1->DR = (u8) dat;
-	while((USART1->SR&0X40)==0);//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+	while((USART1->SR&0X40)==0);//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•
 }
 
 
-/* Í¨¹ı´®¿Ú·¢ËÍ¶à¸ö×Ö½ÚÊı¾İ */
+/* é€šè¿‡ä¸²å£å‘é€å¤šä¸ªå­—èŠ‚æ•°æ® */
 void UART1SendDataPacket(uint8 dat[],uint8 count) {
 	uint32 i;
 	for(i = 0; i < count; i++) {
-		while((USART1->SR&0X40)==0);//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+		while((USART1->SR&0X40)==0);//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•
 		USART1->DR = dat[i];
-		while((USART1->SR&0X40)==0);//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+		while((USART1->SR&0X40)==0);//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•
 	}
 }
 
 
-/* ½ÓÊÜµçÄÔ´«ËÍµÄÊı¾İ£¬²¢½âÎöÖ¸Áî */
+/* æ¥å—ç”µè„‘ä¼ é€çš„æ•°æ®ï¼Œå¹¶è§£ææŒ‡ä»¤ */
 void USART1_IRQHandler(void) {
 	uint8 i;
 	uint8 rxBuf;
@@ -79,13 +79,13 @@ void USART1_IRQHandler(void) {
 	static uint8 messageLengthSum = 2;
 
     if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
-        rxBuf = USART_ReceiveData(USART1); //¶ÁÈ¡½ÓÊÕµ½µÄÊı¾İ
+        rxBuf = USART_ReceiveData(USART1); //è¯»å–æ¥æ”¶åˆ°çš„æ•°æ®
 		if(!fFrameStart) {
-			if(rxBuf == 0x55) { //Á¬Ğø·¢ËÍÁ½¸ö0x55ºó£¬ÔÙ·¢ËÍÊı¾İ
+			if(rxBuf == 0x55) { //è¿ç»­å‘é€ä¸¤ä¸ª0x55åï¼Œå†å‘é€æ•°æ®
 				startCodeSum++;
 				if(startCodeSum == 2) {
 					startCodeSum = 0;
-					fFrameStart = TRUE; //½øÈëÏÂÒ»¸öif£¬¿ªÊ¼½âÎöÊı¾İ
+					fFrameStart = TRUE; //è¿›å…¥ä¸‹ä¸€ä¸ªifï¼Œå¼€å§‹è§£ææ•°æ®
 					messageLength = 1;
 				}
 			} else {
@@ -95,7 +95,7 @@ void USART1_IRQHandler(void) {
 			}
 		} if(fFrameStart) {
 			Uart1RxBuffer[messageLength] = rxBuf;
-			if(messageLength == 2)//Ë÷Òı0¡¢1Îª0x55,Ë÷Òı2ÎªÊı¾İ³¤¶È
+			if(messageLength == 2)//ç´¢å¼•0ã€1ä¸º0x55,ç´¢å¼•2ä¸ºæ•°æ®é•¿åº¦
 			{ 
 				messageLengthSum = Uart1RxBuffer[messageLength];
 				if(messageLengthSum < 2) {// || messageLengthSum > 30 
@@ -105,11 +105,11 @@ void USART1_IRQHandler(void) {
 			}
 			messageLength++;
 	
-			if(messageLength == messageLengthSum + 2) { //×îºóÒ»¸ö×Ö½ÚÊı¾İ
+			if(messageLength == messageLengthSum + 2) { //æœ€åä¸€ä¸ªå­—èŠ‚æ•°æ®
 				if(fUartRxComplete == FALSE) {
 					fUartRxComplete = TRUE;
 					for(i = 0;i < messageLength;i++) {
-						UartRxBuffer[i] = Uart1RxBuffer[i]; //¸´ÖÆÊı¾İµ½UartRxBuffer
+						UartRxBuffer[i] = Uart1RxBuffer[i]; //å¤åˆ¶æ•°æ®åˆ°UartRxBuffer
 					}
 				}
 				fFrameStart = FALSE;
@@ -119,7 +119,7 @@ void USART1_IRQHandler(void) {
 }
 
 
-/* ÏòµçÄÔ·¢ËÍÊı¾İ,ÓÃÓÚ´®¿Ú¿ØÖÆ»úĞµ±ÛÊ±»Ø´«Êı¾İ */
+/* å‘ç”µè„‘å‘é€æ•°æ®,ç”¨äºä¸²å£æ§åˆ¶æœºæ¢°è‡‚æ—¶å›ä¼ æ•°æ® */
 void McuToPCSendData(uint8 cmd,uint8 prm1,uint8 prm2) {
 	uint8 dat[8];
 	uint8 datlLen = 2;
@@ -141,7 +141,7 @@ void McuToPCSendData(uint8 cmd,uint8 prm1,uint8 prm2) {
 }
 
 
-/* ´®¿Ú½ÓÊÜÍê±Ï */
+/* ä¸²å£æ¥å—å®Œæ¯• */
 static bool UartRxOK(void) {
 	if(fUartRxComplete) {
 		fUartRxComplete = FALSE;
@@ -156,7 +156,7 @@ void FlashEraseAll(void);
 void SaveAct(uint8 fullActNum,uint8 frameIndexSum,uint8 frameIndex,uint8* pBuffer);
 
 
-/* ½ÓÊÜµçÄÔ´«ÊäÖ¸Áî²¢Ö´ĞĞ */
+/* æ¥å—ç”µè„‘ä¼ è¾“æŒ‡ä»¤å¹¶æ‰§è¡Œ */
 void TaskPCMsgHandle(void) {
 	uint16 i;
 	uint8 cmd;
@@ -173,7 +173,7 @@ void TaskPCMsgHandle(void) {
 		cmd = UartRxBuffer[3];
  		switch(cmd)
 		{
- 			case CMD_MULT_SERVO_MOVE://¿ØÖÆ¶à¸ö¶æ»ú×ª¶¯
+ 			case CMD_MULT_SERVO_MOVE://æ§åˆ¶å¤šä¸ªèˆµæœºè½¬åŠ¨
 				servoCount = UartRxBuffer[4];
 				time = UartRxBuffer[5] + (UartRxBuffer[6]<<8);
 				for(i = 0; i < servoCount; i++) {
@@ -184,23 +184,23 @@ void TaskPCMsgHandle(void) {
 				}				
  				break;
 
-			case CMD_FULL_ACTION_RUN://¶¯×÷×éÔËĞĞ
-				fullActNum = UartRxBuffer[4];//¶¯×÷×é±àºÅ
-				times = UartRxBuffer[5] + (UartRxBuffer[6]<<8);//ÔËĞĞ´ÎÊı
+			case CMD_FULL_ACTION_RUN://åŠ¨ä½œç»„è¿è¡Œ
+				fullActNum = UartRxBuffer[4];//åŠ¨ä½œç»„ç¼–å·
+				times = UartRxBuffer[5] + (UartRxBuffer[6]<<8);//è¿è¡Œæ¬¡æ•°
 				McuToPCSendData(CMD_FULL_ACTION_RUN, 0, 0);
 				FullActRun(fullActNum,times);
 				break;
 
-			case CMD_FULL_ACTION_STOP://Í£Ö¹ÕıÔÚÔËĞĞµÄ¶¯×÷
+			case CMD_FULL_ACTION_STOP://åœæ­¢æ­£åœ¨è¿è¡Œçš„åŠ¨ä½œ
 				FullActStop();
 				break;
 
-			case CMD_FULL_ACTION_ERASE://½«ÏÂÔØµ½¿ØÖÆ°åµÄ¶¯×÷×é²é³ö
+			case CMD_FULL_ACTION_ERASE://å°†ä¸‹è½½åˆ°æ§åˆ¶æ¿çš„åŠ¨ä½œç»„æŸ¥å‡º
 				FlashEraseAll();
 				McuToPCSendData(CMD_FULL_ACTION_ERASE,0,0);
 				break;
 
-			case CMD_ACTION_DOWNLOAD://ÏÂÔØ¶¯×÷×é£¬Ò»Ö¡Ò»Ö¡µØÏÂÔØ
+			case CMD_ACTION_DOWNLOAD://ä¸‹è½½åŠ¨ä½œç»„ï¼Œä¸€å¸§ä¸€å¸§åœ°ä¸‹è½½
 				SaveAct(UartRxBuffer[4], UartRxBuffer[5], UartRxBuffer[6], UartRxBuffer + 7);
 				McuToPCSendData(CMD_ACTION_DOWNLOAD,0,0);
 				break;
@@ -210,39 +210,39 @@ void TaskPCMsgHandle(void) {
 
 
 /**
-  * @brief  ¶¯×÷×éÒ»Ö¡Êı¾İĞ´Èëflash
-  * @param  fullActNum:		ÒªÏÂÔØµ½¼¸ºÅ¶¯×÷×é
-  * @param  frameIndexSum: 	¸Ã¶¯×÷µÄ×ÜÖ¡Êı
-  * @param  frameIndex£º	ÒªĞ´ÈëµÚ¼¸Ö¡Êı¾İ
-  * @param  pBuffer£º		ÆäËûÊı¾İ
+  * @brief  åŠ¨ä½œç»„ä¸€å¸§æ•°æ®å†™å…¥flash
+  * @param  fullActNum:		è¦ä¸‹è½½åˆ°å‡ å·åŠ¨ä½œç»„
+  * @param  frameIndexSum: 	è¯¥åŠ¨ä½œçš„æ€»å¸§æ•°
+  * @param  frameIndexï¼š	è¦å†™å…¥ç¬¬å‡ å¸§æ•°æ®
+  * @param  pBufferï¼š		å…¶ä»–æ•°æ®
   * @retval void
   */
 void SaveAct(uint8 fullActNum, uint8 frameIndexSum, uint8 frameIndex, uint8* pBuffer) {
 	uint8 i;
-	if(frameIndex == 0) {//Ğ´ÈëµÚÒ»Ö¡Êı¾İÊ±²Á³ı¶¯×÷×éÉÈÇø
-		//Ò»¸ö¶¯×÷×éÕ¼16k´óĞ¡£¬²Á³ıÒ»¸öÉÈÇøÊÇ4k£¬ËùÒÔÒª²Á4´Î
+	if(frameIndex == 0) {//å†™å…¥ç¬¬ä¸€å¸§æ•°æ®æ—¶æ“¦é™¤åŠ¨ä½œç»„æ‰‡åŒº
+		//ä¸€ä¸ªåŠ¨ä½œç»„å 16kå¤§å°ï¼Œæ“¦é™¤ä¸€ä¸ªæ‰‡åŒºæ˜¯4kï¼Œæ‰€ä»¥è¦æ“¦4æ¬¡
 		for(i = 0;i < 4;i++) {
 			FlashEraseSector((MEM_ACT_FULL_BASE) + (fullActNum * ACT_FULL_SIZE) + (i * 4096));
 		}
 	}
 
-	//Ğ´ÈëÒ»Ö¡Êı¾İ£¬¹²64×Ö½Ú
+	//å†™å…¥ä¸€å¸§æ•°æ®ï¼Œå…±64å­—èŠ‚
 	FlashWrite((MEM_ACT_FULL_BASE) + (fullActNum * ACT_FULL_SIZE) + (frameIndex * ACT_SUB_FRAME_SIZE) , ACT_SUB_FRAME_SIZE, pBuffer);
 	
 	if((frameIndex + 1) ==  frameIndexSum) {
-		//¶ÁÈ¡256×é¶¯×÷µÄ¶¯×÷Êı²¢±£´æµ½frameIndexSumSum
+		//è¯»å–256ç»„åŠ¨ä½œçš„åŠ¨ä½œæ•°å¹¶ä¿å­˜åˆ°frameIndexSumSum
 		FlashRead(MEM_FRAME_INDEX_SUM_BASE, 256, frameIndexSumSum);
-		//¸üĞÂ¸Ã×é¶¯×÷µÄ¶¯×÷Êı
+		//æ›´æ–°è¯¥ç»„åŠ¨ä½œçš„åŠ¨ä½œæ•°
 		frameIndexSumSum[fullActNum] = frameIndexSum;
-		//²Á³ıÒ³
+		//æ“¦é™¤é¡µ
 		FlashEraseSector(MEM_FRAME_INDEX_SUM_BASE);
-		//Ğ´ÈëĞŞ¸ÄºóµÄÊı¾İ
+		//å†™å…¥ä¿®æ”¹åçš„æ•°æ®
 		FlashWrite(MEM_FRAME_INDEX_SUM_BASE,256,frameIndexSumSum);
 	}
 }
 
 
-/* ½«ËùÓĞ255¸ö¶¯×÷×éµÄ¶¯×÷ÊıÉèÖÃÎª0£¬¼´´ú±í½«ËùÓĞ¶¯×÷×é²Á³ı */
+/* å°†æ‰€æœ‰255ä¸ªåŠ¨ä½œç»„çš„åŠ¨ä½œæ•°è®¾ç½®ä¸º0ï¼Œå³ä»£è¡¨å°†æ‰€æœ‰åŠ¨ä½œç»„æ“¦é™¤ */
 void FlashEraseAll(void) {
 	uint16 i;
 	for(i = 0;i <= 255;i++) {
@@ -253,7 +253,7 @@ void FlashEraseAll(void) {
 }
 
 
-/* ³õÊ¼»¯flash */
+/* åˆå§‹åŒ–flash */
 void InitMemory(void) {
 	uint8 i;
 	uint8 logo[] = "LOBOT";
@@ -262,7 +262,7 @@ void InitMemory(void) {
 	for(i = 0; i < 5; i++) {
 		if(logo[i] != datatemp[i]) {
 		LED = LED_ON;
-			//Èç¹û·¢ÏÖ²»ÏàµÈµÄ£¬ÔòËµÃ÷ÊÇĞÂFLASH£¬ĞèÒª³õÊ¼»¯
+			//å¦‚æœå‘ç°ä¸ç›¸ç­‰çš„ï¼Œåˆ™è¯´æ˜æ˜¯æ–°FLASHï¼Œéœ€è¦åˆå§‹åŒ–
 			FlashEraseSector(MEM_LOBOT_LOGO_BASE);
 			FlashWrite(MEM_LOBOT_LOGO_BASE,5,logo);
 			FlashEraseAll();

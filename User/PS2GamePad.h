@@ -2,16 +2,16 @@
 #define _PS2_GAME_PAD_H_
 
 
-#define DI   PBin(12)           //ÊäÈë
+#define DI   PBin(12)           //è¾“å…¥
 
-#define DO_H PBout(1)=1        //ÃüÁîÎ»¸ß
-#define DO_L PBout(1)=0        //ÃüÁîÎ»µÍ
+#define DO_H PBout(1)=1        //å‘½ä»¤ä½é«˜
+#define DO_L PBout(1)=0        //å‘½ä»¤ä½ä½
 
-#define CS_H PBout(0)=1       //CSÀ­¸ß
-#define CS_L PBout(0)=0       //CSÀ­µÍ
+#define CS_H PBout(0)=1       //CSæ‹‰é«˜
+#define CS_L PBout(0)=0       //CSæ‹‰ä½
 
-#define CLK_H PCout(5)=1      //Ê±ÖÓÀ­¸ß
-#define CLK_L PCout(5)=0      //Ê±ÖÓÀ­µÍ
+#define CLK_H PCout(5)=1      //æ—¶é’Ÿæ‹‰é«˜
+#define CLK_L PCout(5)=0      //æ—¶é’Ÿæ‹‰ä½
 
 
 //These are our button constants
@@ -27,15 +27,15 @@
 #define PSB_R2          10
 #define PSB_L1          11
 #define PSB_R1          12
-#define PSB_TRIANGLE    13	//Èı½ÇĞÎ
-#define PSB_CIRCLE      14	//Ô²È¦
-#define PSB_CROSS       15	//²æ²æ
-#define PSB_SQUARE      16	//·½¿ò
+#define PSB_TRIANGLE    13	//ä¸‰è§’å½¢
+#define PSB_CIRCLE      14	//åœ†åœˆ
+#define PSB_CROSS       15	//å‰å‰
+#define PSB_SQUARE      16	//æ–¹æ¡†
 
 //#define WHAMMY_BAR		8
 
 //These are stick values
-#define PSS_RX 5                //ÓÒÒ¡¸ËXÖáÊı¾İ
+#define PSS_RX 5                //å³æ‘‡æ†Xè½´æ•°æ®
 #define PSS_RY 6
 #define PSS_LX 7
 #define PSS_LY 8
@@ -43,19 +43,19 @@
 
 
 u8 InitPS2(void);
-u8 PS2_RedLight(void);//ÅĞ¶ÏÊÇ·ñÎªºìµÆÄ£Ê½
+u8 PS2_RedLight(void);//åˆ¤æ–­æ˜¯å¦ä¸ºçº¢ç¯æ¨¡å¼
 void PS2_ReadData(void);
 void PS2_Cmd(u8 CMD);		  //
-u8 PS2_DataKey(void);		  //¼üÖµ¶ÁÈ¡
-u8 PS2_AnologData(u8 button); //µÃµ½Ò»¸öÒ¡¸ËµÄÄ£ÄâÁ¿
-void PS2_ClearData(void);	  //Çå³ıÊı¾İ»º³åÇø
-void PS2_Vibration(u8 motor1, u8 motor2);//Õñ¶¯ÉèÖÃmotor1  0xFF¿ª£¬ÆäËû¹Ø£¬motor2  0x40~0xFF
+u8 PS2_DataKey(void);		  //é”®å€¼è¯»å–
+u8 PS2_AnologData(u8 button); //å¾—åˆ°ä¸€ä¸ªæ‘‡æ†çš„æ¨¡æ‹Ÿé‡
+void PS2_ClearData(void);	  //æ¸…é™¤æ•°æ®ç¼“å†²åŒº
+void PS2_Vibration(u8 motor1, u8 motor2);//æŒ¯åŠ¨è®¾ç½®motor1  0xFFå¼€ï¼Œå…¶ä»–å…³ï¼Œmotor2  0x40~0xFF
 
-void PS2_EnterConfing(void);	 //½øÈëÅäÖÃ
-void PS2_TurnOnAnalogMode(void); //·¢ËÍÄ£ÄâÁ¿
-void PS2_VibrationMode(void);    //Õñ¶¯ÉèÖÃ
-void PS2_ExitConfing(void);	     //Íê³ÉÅäÖÃ
-u8 PS2_SetInit(void);		     //ÅäÖÃ³õÊ¼»¯
+void PS2_EnterConfing(void);	 //è¿›å…¥é…ç½®
+void PS2_TurnOnAnalogMode(void); //å‘é€æ¨¡æ‹Ÿé‡
+void PS2_VibrationMode(void);    //æŒ¯åŠ¨è®¾ç½®
+void PS2_ExitConfing(void);	     //å®Œæˆé…ç½®
+u8 PS2_SetInit(void);		     //é…ç½®åˆå§‹åŒ–
 
 
 bool PS2_NewButtonState( u16 button );

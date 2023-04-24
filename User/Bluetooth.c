@@ -23,8 +23,8 @@ void InitUart3(void) {
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
-	//USART ³õÊ¼»¯ÉèÖÃ
-	USART_InitStructure.USART_BaudRate = 9600; //Ò»°ãÉèÖÃÎª9600;
+	//USART åˆå§‹åŒ–è®¾ç½®
+	USART_InitStructure.USART_BaudRate = 9600; //ä¸€èˆ¬è®¾ç½®ä¸º9600;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -32,18 +32,18 @@ void InitUart3(void) {
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	USART_Init(USART3, &USART_InitStructure);
 	
-	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//¿ªÆôÖĞ¶Ï
-	USART_Cmd(USART3, ENABLE);//Ê¹ÄÜ´®¿Ú
+	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);//å¼€å¯ä¸­æ–­
+	USART_Cmd(USART3, ENABLE);//ä½¿èƒ½ä¸²å£
 	
 	NVIC_InitStructure.NVIC_IRQChannel = USART3_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=1 ;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);//IRQÍ¨µÀÊ¹ÄÜ
+	NVIC_Init(&NVIC_InitStructure);//IRQé€šé“ä½¿èƒ½
 }
 
 
-/* ´®¿Ú3ÖĞ¶Ï·şÎñ³ÌĞò */
+/* ä¸²å£3ä¸­æ–­æœåŠ¡ç¨‹åº */
 void USART3_IRQHandler(void) {
 	u8 rxBuf;
 	static uint8 startCodeSum = 0;
@@ -51,9 +51,9 @@ void USART3_IRQHandler(void) {
 	static uint8 messageLength = 0;
 	static uint8 messageLengthSum = 2;
 	
-	//½ÓÊÕÖĞ¶Ï(½ÓÊÕµ½µÄÊı¾İ±ØĞëÊÇ0x0d 0x0a½áÎ²) 
+	//æ¥æ”¶ä¸­æ–­(æ¥æ”¶åˆ°çš„æ•°æ®å¿…é¡»æ˜¯0x0d 0x0aç»“å°¾) 
 	if(USART_GetITStatus(USART3, USART_IT_RXNE) != RESET) {
-		rxBuf =USART_ReceiveData(USART3);//¶ÁÈ¡½ÓÊÕµ½µÄÊı¾İ
+		rxBuf =USART_ReceiveData(USART3);//è¯»å–æ¥æ”¶åˆ°çš„æ•°æ®
 
 		if(!fFrameStart) {
 			if(rxBuf == 0x55) {
@@ -89,20 +89,20 @@ void USART3_IRQHandler(void) {
 }
 
 
-/* Ê¹ÓÃUART3·¢ËÍÊı×é */
+/* ä½¿ç”¨UART3å‘é€æ•°ç»„ */
 void USART3SendDataPacket(uint8 tx[],uint32 count) {
 	uint32 i;
 	for (i = 0; i < count; i++) {
 		while((USART3->SR&0X40)==0);
-		//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+		//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•
 		USART3->DR = tx[i];
 		while((USART3->SR&0X40)==0);
-		//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï
+		//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•
 	}
 }
 
 
-/* ÅĞ¶ÏÖ®Ç°ÊÇ·ñ½ÓÊÜ¹ıÊı¾İ */
+/* åˆ¤æ–­ä¹‹å‰æ˜¯å¦æ¥å—è¿‡æ•°æ® */
 static bool UartRxOK(void) {
 	if(fUartRxComplete) {
 		fUartRxComplete = FALSE;
@@ -113,7 +113,7 @@ static bool UartRxOK(void) {
 }
 
 
-/* µ¥Æ¬»úÏòÀ¶ÑÀ·¢ËÍÊı¾İ */
+/* å•ç‰‡æœºå‘è“ç‰™å‘é€æ•°æ® */
 void McuToPCSendDataByBLE(uint8 cmd,uint8 prm1,uint8 prm2) {
 	uint8 dat[8];
 	uint8 datlLen = 2;
@@ -128,7 +128,7 @@ void McuToPCSendDataByBLE(uint8 cmd,uint8 prm1,uint8 prm2) {
 }
 
 
-/* ´¦ÀíÀ¶ÑÀ½ÓÊÜµÄÊı¾İ */
+/* å¤„ç†è“ç‰™æ¥å—çš„æ•°æ® */
 void TaskBLEMsgHandle(void) {
 	uint16 i;
 	uint8 cmd;
@@ -158,9 +158,9 @@ void TaskBLEMsgHandle(void) {
 			
 			case CMD_FULL_ACTION_RUN:
 				fullActNum = UartRxBuffer[4];
-				//¶¯×÷×é±àºÅ
+				//åŠ¨ä½œç»„ç¼–å·
 				times = UartRxBuffer[5] + (UartRxBuffer[6]<<8);
-				//ÔËĞĞ´ÎÊı
+				//è¿è¡Œæ¬¡æ•°
 				FullActRun(fullActNum,times);
 				break;
 			

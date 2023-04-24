@@ -3,7 +3,7 @@
 
 
 void TaskRobotRun(void);
-void FullActRun(uint8 actFullnum,uint32 times);//初始化并运行新的动作
+void FullActRun(uint8 actFullnum,uint32 times);//鍒濆鍖栧苟杩愯鏂扮殑鍔ㄤ綔
 void FullActStop(void);
 
 
