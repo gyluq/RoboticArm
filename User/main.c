@@ -1,22 +1,6 @@
 #include "include.h"
 
 
-
-// 发送数据
-int fputc(int ch, FILE *f) {
-	USART_SendData(USART1, (unsigned char) ch);
-	while (!(USART1->SR & USART_FLAG_TXE));
-	return (ch);
-}
-
-// 接收数据
-int GetKey (void) {
-	while (!(USART1->SR & USART_FLAG_RXNE));
-	return ((int)(USART1->DR & 0x1FF));
-}
-
-
-
 int main(void) {
 	uint8 ps_ok = 1;
 	
@@ -38,14 +22,6 @@ int main(void) {
 	InitMemory();
 	InitBusServoCtrl();
 	LED = LED_ON;
-	
-	/* 测试 */
-	int te = 0;
-	DelayS(4);
-	printf("start\n");
-	printf("ps_ok=%d\n", ps_ok);
-	ps_ok = InitPS2();//PS2游戏手柄接收器初始化，为0
-	printf("ps_ok=%d\n", ps_ok);
 	
 	while(1) {
 		TaskRun(ps_ok);

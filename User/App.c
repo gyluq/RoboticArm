@@ -175,8 +175,6 @@ void CheckBatteryVoltage(void) {
 	v >>= 3;
 	v = v * 2475 / 1024;//adc / 4096 * 3300 * 3(3代表放大3倍，因为采集电压时电阻分压了)
 	BatteryVoltage = v;
-	
-	printf("voltage:%d", BatteryVoltage);
 }
 
 
@@ -338,70 +336,56 @@ void TaskRun(u8 ps2_ok) {
 					}
 
 				switch( PS2KeyValue ) {
-					printf("switch key\n");
 					//根据按下的按键，控制舵机转动
 					case PSB_PAD_LEFT:
 						ServoSetPluseAndTime( 6, ServoPwmDutySet[6] + 20, 50 );
-						printf("left\n");
 						break;
 
 					case PSB_PAD_RIGHT:
 						ServoSetPluseAndTime( 6, ServoPwmDutySet[6] - 20, 50 );
-						printf("right\n");
 						break;
 
 					case PSB_PAD_UP:
 						ServoSetPluseAndTime( 5, ServoPwmDutySet[5] + 20, 50 );
-						printf("up\n");
 						break;
 
 					case PSB_PAD_DOWN:
 						ServoSetPluseAndTime( 5, ServoPwmDutySet[5] - 20, 50 );
-						printf("down\n");
 						break;
 
 					case PSB_L1:
 						ServoSetPluseAndTime( 2, ServoPwmDutySet[2] + 20, 50 );
-						printf("L1\n");
 						break;
 
 					case PSB_R1:
 						ServoSetPluseAndTime( 2, ServoPwmDutySet[2] - 20, 50 );
-						printf("R1\n");
 						break;
 
 					case PSB_L2:
 						ServoSetPluseAndTime( 1, ServoPwmDutySet[1] + 20, 50 );
-						printf("L2\n");
 						break;
 
 					case PSB_R2:
 						ServoSetPluseAndTime( 1, ServoPwmDutySet[1] - 20, 50 );
-						printf("R2\n");
 						break;
 
 					case PSB_TRIANGLE:
 						ServoSetPluseAndTime( 4, ServoPwmDutySet[4] - 20, 50 );
-						printf("triangle\n");
 						break;
 
 					case PSB_CROSS:
 						ServoSetPluseAndTime( 4, ServoPwmDutySet[4] + 20, 50 );
-						printf("cross\n");
 						break;
 
 					case PSB_CIRCLE:
 						ServoSetPluseAndTime( 3, ServoPwmDutySet[3] + 20, 50 );
-						printf("circle\n");
 						break;
 
 					case PSB_SQUARE:
 						ServoSetPluseAndTime( 3, ServoPwmDutySet[3] - 20, 50 );
-						printf("square\n");
 						break;
 
 					case PSB_START:
-						printf("start\n");
 						ServoSetPluseAndTime( 1, 1500, 1000 );
 						ServoSetPluseAndTime( 2, 1500, 1000 );
 						ServoSetPluseAndTime( 3, 1500, 1000 );

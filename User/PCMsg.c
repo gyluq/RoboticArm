@@ -10,6 +10,19 @@ uint8 Uart1RxBuffer[260];
 uint8  frameIndexSumSum[256];
 
 
+// 发送数据
+int fputc(int ch, FILE *f) {
+	USART_SendData(USART1, (unsigned char) ch);
+	while (!(USART1->SR & USART_FLAG_TXE));
+	return (ch);
+}
+
+// 接收数据
+int GetKey (void) {
+	while (!(USART1->SR & USART_FLAG_RXNE));
+	return ((int)(USART1->DR & 0x1FF));
+}
+
 
 /* 初始化UART1 */
 void InitUart1(void) {

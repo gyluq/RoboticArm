@@ -40,7 +40,7 @@ u8 InitPS2(void) {
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
@@ -314,7 +314,7 @@ void PS2_ExitConfing(void) {
 
 //手柄配置初始化
 u8 PS2_SetInit(void) {
-	DelayMs(100);
+	DelayS(4);
 	PS2_ShortPoll();
 	PS2_ShortPoll();
 	PS2_ShortPoll();

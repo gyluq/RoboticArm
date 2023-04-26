@@ -21,7 +21,6 @@ void ServoSetPluseAndTime(uint8 id, uint16 p, uint16 time) {
 		ServoPwmDutySet[id] = p;
 		ServoTime = time;
 		ServoPwmDutyHaveChange = TRUE;//PWM脉冲宽度改变标志
-//		printf("width:id=%d--pos=%d--t=%d\n",id,p,time);
 	}
 }
 
@@ -86,7 +85,6 @@ void InitPWM(void) {
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	
 	InitTimer3();
-	
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;		 //推挽输出
